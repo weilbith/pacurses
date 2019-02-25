@@ -1,7 +1,7 @@
 from urwid import SimpleFocusListWalker, CheckBox
 
 from gui.menus.menu import Menu
-from gui.abbreviation import abbreviate_text
+from gui.abbreviation import abbreviate_output
 from constants.menu_names import MenuNames
 from pulse_audio.information import Information
 
@@ -13,10 +13,11 @@ class MuteMenu(Menu):
 
     def __init__(self, width, state, redraw):
         info = Information()
+        length = width - CHECKBOX_WIDTH - 2
         checkboxes = []
 
         for output in info.output_list:
-            name = abbreviate_text(output.name, width - CHECKBOX_WIDTH - 2)
+            name = abbreviate_output(output, length)
             checkbox = CheckBox(
                 name,
                 state=output.muted,

@@ -1,6 +1,6 @@
 from urwid import Columns, Button, AttrMap
 
-from gui.widgets.names_progress_bar import NamedProgressBar
+from gui.widgets.named_progress_bar import NamedProgressBar
 from constants.palette_names import PaletteNames
 
 

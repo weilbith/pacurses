@@ -15,19 +15,13 @@ class Footer(Pile):
         buttons = []
 
         if ButtonNames.BACK in button_list:
-            button = Button("Back", switch_menu, MenuNames.MAIN)
-            button = AttrMap(button, PaletteNames.REVERSED, '')
-            buttons.append(button)
+            buttons.append(self.design_button("Back", switch_menu, user_data=MenuNames.MAIN))
 
         if ButtonNames.HELP in button_list:
-            button = Button("Help", switch_menu, MenuNames.HELP)
-            button = AttrMap(button, PaletteNames.REVERSED, '')
-            buttons.append(button)
+            buttons.append(self.design_button("Help", switch_menu, user_data=MenuNames.HELP))
 
         if ButtonNames.CLOSE in button_list:
-            button = Button("Close", self.exit)
-            button = AttrMap(button, PaletteNames.REVERSED, '')
-            buttons.append(button)
+            buttons.append(self.design_button("Close", self.exit))
 
         button_grid = GridFlow(buttons, 9, 2, 0, "center")
 
@@ -40,6 +34,11 @@ class Footer(Pile):
 
     def exit(self, _):
         raise ExitMainLoop()
+
+    def design_button(self, label, callback, user_data=None):
+        button = Button(label, callback, user_data)
+        decorated_button = AttrMap(button, PaletteNames.REVERSED, '')
+        return decorated_button
 
     def keypress(self, size, key):
         key = super(Footer, self).keypress(size, key)

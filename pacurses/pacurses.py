@@ -77,13 +77,18 @@ class App:
         self.header.text = self.menu.header_text
         self.frame.body = self.menu
 
-        button_list = []
-        button_list.extend([ButtonNames.BACK] if menu_name != MenuNames.MAIN else [])
-        button_list.extend([ButtonNames.HELP] if menu_name != MenuNames.HELP else [])
+        self.frame.focus_position = "body"
+        self.update_footer()
 
-        self.update_footer(button_list=button_list)
+    def update_footer(self):
+        button_list = [ButtonNames.CLOSE]
+        button_list.extend(
+            [ButtonNames.BACK] if self.menu.name != MenuNames.MAIN else []
+        )
+        button_list.extend(
+            [ButtonNames.HELP] if self.menu.name != MenuNames.HELP else []
+        )
 
-    def update_footer(self, button_list=[]):
         button_list.extend([ButtonNames.CLOSE])
         self.footer = Footer(self.inner_width, button_list, self.switch_menu)
         self.frame.footer = self.footer
@@ -106,15 +111,15 @@ class App:
             self.switch_menu(None, MenuNames.HELP)
 
         if key == "tab":
-            if self.frame.focus_position == 'body':
-                self.frame.focus_position = 'footer'
+            if self.frame.focus_position == "body":
+                self.frame.focus_position = "footer"
 
             else:
                 last_index = len(self.footer.button_list.cells) - 1
                 position = self.footer.button_list.focus_position
 
                 if position == last_index:
-                    self.frame.focus_position = 'body'
+                    self.frame.focus_position = "body"
                     self.footer.button_list.focus_position = 0
 
                 else:

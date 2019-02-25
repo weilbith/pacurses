@@ -2,22 +2,19 @@ from urwid import SimpleFocusListWalker
 
 from gui.menus.menu import Menu, FOCUS_POSITION_INTERNAL
 from gui.widgets.volume_slider import VolumeSlider
-from constants.menu_names import MenuNames
 from pulse_audio.information import Information
+from constants.menu_names import MenuNames
 
 
 class VolumeMenu(Menu):
     def __init__(self, width, state, redraw):
         info = Information()
-        bars = []
+        slider_list = [
+            VolumeSlider(output, self.redraw_self, width=width)
+            for output in info.output_list
+        ]
 
-        for index, output in enumerate(info.output_list):
-            bar = VolumeSlider(output, self.redraw_self, width=width)
-            bar_two = VolumeSlider(output, self.redraw_self, width=width)
-            bars.append(bar)
-            bars.append(bar_two)
-
-        walker = SimpleFocusListWalker(bars)
+        walker = SimpleFocusListWalker(slider_list)
 
         super(VolumeMenu, self).__init__(walker, width, state, redraw)
 
@@ -32,9 +29,7 @@ class VolumeMenu(Menu):
     @property
     def current_state(self):
         state = super(VolumeMenu, self).current_state
-        state[FOCUS_POSITION_INTERNAL] = [
-            bar.focus_position for bar in self.body
-        ]
+        state[FOCUS_POSITION_INTERNAL] = [bar.focus_position for bar in self.body]
 
         return state
 
@@ -57,9 +52,9 @@ class VolumeMenu(Menu):
     def keypress(self, size, key):
         key = super(VolumeMenu, self).keypress(size, key)
 
-        if key and key in ('j', 'k', 'down', 'up'):
+        if key and key in ("j", "k", "down", "up"):
             self.body[self.focus_position].set_focus(True)
-            step = 1 if key in ('k', 'up') else - 1
+            step = 1 if key in ("k", "up") else -1
             try:
                 self.body[self.focus_position + step].set_focus(False)
             except IndexError:
