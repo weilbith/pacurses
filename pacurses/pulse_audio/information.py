@@ -8,12 +8,6 @@ class Information:
         pass
 
     @property
-    def output_default_index(self):
-        return call_pacmd(
-            "list-sinks | grep '* index' | awk -F ': ' '{print $2}'"
-        ).splitlines()[0]
-
-    @property
     def output_list(self):
         index_list = call_pacmd(
             "list-sinks | grep 'index' | awk -F ': ' '{print $2}'"

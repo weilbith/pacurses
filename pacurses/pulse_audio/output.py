@@ -19,7 +19,7 @@ class Output():
     @volume.setter
     def volume(self, value):
         new_base = int(value * self.step)
-        call_pacmd("set-sink-volume {0} {1}".format(self.index, new_base))
+        call_pacmd(f"set-sink-volume {self.index} {new_base}")
 
     @property
     def muted(self):
@@ -27,13 +27,22 @@ class Output():
 
     @muted.setter
     def muted(self, value):
-        call_pacmd("set-sink-mute {0} {1}".format(self.index, value))
+        call_pacmd(f"set-sink-mute {self.index} {value}")
+
+    @property
+    def default(self):
+        return self.get_info('index: ', split=' ', column=1) == '*'
+
+    @default.setter
+    def default(self, value):
+        if value:
+            call_pacmd(f"set-default-sink {self.index}")
 
     def get_info(self, filter, split=' ', column=2):
         command = "list-sinks"
-        command += "| grep -A 38 'index: {0}'".format(self.index)
-        command += "| grep '{0}'".format(filter)
-        command += "| awk -F '" + split + "' '{print $ " + str(column) + "}'"
+        command += f"| grep -A 38 'index: {self.index}'"
+        command += f"| grep '{filter}'"
+        command += "| awk -F '" + split + "' '{print $" + str(column) + "}'"
 
         information = call_pacmd(command)
 

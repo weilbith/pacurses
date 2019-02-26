@@ -10,7 +10,6 @@ CHECKBOX_WIDTH = 4
 
 
 class MuteMenu(Menu):
-
     def __init__(self, width, state, redraw):
         info = Information()
         length = width - CHECKBOX_WIDTH - 2
@@ -39,6 +38,6 @@ class MuteMenu(Menu):
     def header_text(self):
         return "(Un)Check a sink to (un)mute:"
 
-    def mute_output(self, _, bool, output):
-        output.muted = bool
+    def mute_output(self, _, value, output):
+        output.muted = value
         self.redraw_self()

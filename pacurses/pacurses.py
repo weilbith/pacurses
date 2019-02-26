@@ -149,4 +149,4 @@ class App:
         loop.run()
 
 
-App((40, 25)).start()
+App((48, 30)).start()

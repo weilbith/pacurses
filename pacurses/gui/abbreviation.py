@@ -31,8 +31,7 @@ def abbreviate_two_text(text_one, text_two, total_length):
 
 
 def abbreviate_output(output, length, with_state=False):
-    info = Information()
-    default_output_prefix = DEFAULT_PREFIX_STRING if output.index == info.output_default_index else " "
+    default_output_prefix = DEFAULT_PREFIX_STRING if output.default else " "
     name = "{0}{1} {2}".format(output.index, default_output_prefix, output.name)
     length = length - len(default_output_prefix) - 3
 

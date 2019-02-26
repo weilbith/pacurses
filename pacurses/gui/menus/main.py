@@ -11,16 +11,13 @@ BUTTON_DECORATION_WIDTH = 2 * 2
 
 class MainMenu(Menu):
     def __init__(self, width, state, redraw):
+        self.redraw = redraw
+        self.max_label_width = width - BUTTON_DECORATION_WIDTH
+
         buttons = []
-        max_label_width = width - BUTTON_DECORATION_WIDTH
-
-        label = abbreviate_text("Adjust Sink Volumes", max_label_width)
-        button_volume = Button(label, redraw, MenuNames.VOLUME)
-        buttons.append(AttrMap(button_volume, None, focus_map=PaletteNames.REVERSED))
-
-        label = abbreviate_text("Mute Sinks", max_label_width)
-        button_mute = Button(label, redraw, MenuNames.MUTE)
-        buttons.append(AttrMap(button_mute, None, focus_map=PaletteNames.REVERSED))
+        buttons.append(self.create_menu_button("Adjust Sink Volumes", MenuNames.VOLUME))
+        buttons.append(self.create_menu_button("Mute Sinks", MenuNames.MUTE))
+        buttons.append(self.create_menu_button("Set Default Sink", MenuNames.DEFAULT))
 
         walker = SimpleFocusListWalker(buttons)
 
@@ -33,3 +30,9 @@ class MainMenu(Menu):
     @property
     def header_text(self):
         return "Select:"
+
+    def create_menu_button(self, label, menu_name):
+        label = abbreviate_text(label, self.max_label_width)
+        button = Button(label, self.redraw, menu_name)
+        decorated_button = AttrMap(button, None, focus_map=PaletteNames.REVERSED)
+        return decorated_button

@@ -3,6 +3,7 @@ from constants.menu_names import MenuNames
 from gui.menus.main import MainMenu
 from gui.menus.volume import VolumeMenu
 from gui.menus.mute import MuteMenu
+from gui.menus.default import DefaultMenu
 from gui.menus.help import HelpMenu
 
 
@@ -10,6 +11,7 @@ _menu_mapping = {
     MenuNames.MAIN: MainMenu,
     MenuNames.VOLUME: VolumeMenu,
     MenuNames.MUTE: MuteMenu,
+    MenuNames.DEFAULT: DefaultMenu,
     MenuNames.HELP: HelpMenu,
 }
 
