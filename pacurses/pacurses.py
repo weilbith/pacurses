@@ -1,4 +1,3 @@
-import urwid
 from urwid import (
     Divider,
     Frame,
@@ -11,7 +10,7 @@ from urwid import (
 )
 
 from gui.header import Header
-from gui.menus.menu import Menu, MenuState, FOCUS_POSITION
+from gui.menus.menu import Menu, MenuState
 from gui.menus.utils import get_menu
 from gui.footer import Footer
 from gui.palette import palette
@@ -19,6 +18,7 @@ from gui.palette import palette
 from constants.menu_names import MenuNames
 from constants.button_names import ButtonNames
 from constants.palette_names import PaletteNames
+from constants.state_keys import StateKeys
 
 
 PADDING_WIDTH = 2
@@ -35,7 +35,7 @@ class App:
         self.footer = Divider()
         self.frame = Frame(self.menu, header=self.header, footer=self.footer)
 
-        self.switch_menu(None, MenuNames.MAIN)
+        self.switch_menu(MenuNames.MAIN)
 
     @property
     def width(self):
@@ -49,8 +49,7 @@ class App:
     def inner_width(self):
         return self.width - 2 * PADDING_WIDTH - 2
 
-    def switch_menu(self, _, menu_name):
-        # TODO help zeugs.
+    def switch_menu(self, menu_name, sink_type=None):
         menu_name = (
             self.last_menu_name
             if isinstance(self.menu, Menu)
@@ -70,10 +69,13 @@ class App:
         state = (
             self.states[menu_name]
             if menu_name in self.states
-            else MenuState({FOCUS_POSITION: 0})
+            else MenuState({StateKeys.FOCUS_POSITION: 0})
         )
 
-        self.menu = get_menu(menu_name)(self.inner_width, state, self.switch_menu)
+        if StateKeys.SINK_TYPE in state and sink_type:
+            del state[StateKeys.SINK_TYPE]
+
+        self.menu = get_menu(menu_name)(self.inner_width, state, self.switch_menu, sink_type=sink_type)
         self.header.text = self.menu.header_text
         self.frame.body = self.menu
 
@@ -102,13 +104,13 @@ class App:
                 )
 
             else:
-                self.switch_menu(None, MenuNames.MAIN)
+                self.switch_menu(MenuNames.MAIN)
 
         if key == "Q":
             raise ExitMainLoop()
 
         if key == "H":
-            self.switch_menu(None, MenuNames.HELP)
+            self.switch_menu(MenuNames.HELP)
 
         if key == "tab":
             if self.frame.focus_position == "body":
@@ -134,7 +136,7 @@ class App:
             min_width=self.inner_width,
         )
 
-        box = urwid.LineBox(padding, title="pacurses")
+        box = LineBox(padding, title="pacurses")
 
         overlay = Overlay(
             box,

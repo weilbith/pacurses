@@ -6,7 +6,7 @@ from constants.palette_names import PaletteNames
 
 
 class HelpMenu(Menu):
-    def __init__(self, width, state, redraw):
+    def __init__(self, _, width, state, redraw, sink_type=None):
         text = []
 
         text.append(Text((PaletteNames.UNDERLINE, "1. Section")))
@@ -19,7 +19,7 @@ class HelpMenu(Menu):
 
         walker = SimpleFocusListWalker(text)
 
-        super(HelpMenu, self).__init__(walker, width, state, redraw)
+        super(HelpMenu, self).__init__(walker, sink_type, width, state, redraw)
 
     @property
     def name(self):

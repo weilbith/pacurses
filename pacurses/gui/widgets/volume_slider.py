@@ -9,8 +9,8 @@ DIVIDER_WIDTH = 2
 
 
 class VolumeSlider(Columns):
-    def __init__(self, output, redraw, width=20):
-        self.output = output
+    def __init__(self, sink, redraw, width=20):
+        self.sink = sink
         self.redraw = redraw
         self.width = width
         self.focused = False
@@ -54,13 +54,13 @@ class VolumeSlider(Columns):
         return NamedProgressBar(
             normal,
             complete,
-            current=self.output.volume,
-            name=self.output.name,
+            current=self.sink.volume,
+            name=self.sink.name,
             width=slider_width,
         )
 
     def adjust_volume(self, _, value):
-        self.output.volume = self.output.volume + value
+        self.sink.volume = self.sink.volume + value
         self.redraw()
 
     def set_focus(self, value=True):

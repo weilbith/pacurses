@@ -1,4 +1,4 @@
-from pulse_audio.information import Information
+from pulse_audio.output import Output
 
 
 ABBREVIATION_SUFFIX_STRING = "..."
@@ -30,25 +30,15 @@ def abbreviate_two_text(text_one, text_two, total_length):
     )
 
 
-def abbreviate_output(output, length, with_state=False):
-    default_output_prefix = DEFAULT_PREFIX_STRING if output.default else " "
-    name = "{0}{1} {2}".format(output.index, default_output_prefix, output.name)
-    length = length - len(default_output_prefix) - 3
+def abbreviate_sink(sink, sink_type, length, with_state=False):
+    default_prefix = DEFAULT_PREFIX_STRING if type(sink) == Output and sink.default else " "
+    name = "{0}{1} {2}".format(sink.index, default_prefix, sink.name)
+    length = length - len(default_prefix) - 3
 
     if not with_state:
         return abbreviate_text(name, length)
 
     else:
-        state = "{0}%{1}".format(output.volume, " (muted)" if output.muted else "")
+        state = "{0}%{1}".format(sink.volume, " (muted)" if sink.muted else "")
         name, state = abbreviate_two_text(name, state, length)
         return "{0} - {1}".format(name, state)
-
-
-def abbreviate_input(input, length):
-    concatenation_length = len(str(input.index)) + 6
-    application, media = abbreviate_two_text(
-        input.application, input.media, length - concatenation_length
-    )
-
-    return "{0}  {1} - {2}".format(input.index, application, media)
-

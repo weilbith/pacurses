@@ -8,6 +8,7 @@ from constants.button_names import ButtonNames
 
 class Footer(Pile):
     def __init__(self, width, button_list, switch_menu):
+        self.switch_menu = switch_menu
         divider = Divider()
         line = Divider(u"―", top=1, bottom=1)
         status = Status(width)
@@ -31,6 +32,9 @@ class Footer(Pile):
     @property
     def button_list(self):
         return self.contents[self.button_list_index][0]
+
+    def switch_menu_wrapper(self, _, menu_name):
+        self.switch_menu(menu_name)
 
     def exit(self, _):
         raise ExitMainLoop()

@@ -1,8 +1,9 @@
 from urwid import Pile, Text, Divider
 
-from gui.abbreviation import abbreviate_input, abbreviate_output
+from gui.abbreviation import abbreviate_sink
 from pulse_audio.information import Information
 from constants.palette_names import PaletteNames
+from constants.sink_types import SinkTypes
 
 
 MAPPING_OPERATOR_STRING = " -> "
@@ -17,7 +18,9 @@ class Status(Pile):
         rows.append(Text((PaletteNames.UNDERLINE, "Outputs:")))
         rows.extend(
             [
-                Text(" " + abbreviate_output(output, length, with_state=True))
+                Text(
+                    f" {abbreviate_sink(output, SinkTypes.OUTPUT, length, with_state=True)}"
+                )
                 for output in info.output_list
             ]
         )
@@ -25,7 +28,10 @@ class Status(Pile):
         rows.append(Divider())
         rows.append(Text((PaletteNames.UNDERLINE, "Inputs:")))
         rows.extend(
-            [Text(" " + abbreviate_input(input, length)) for input in info.input_list]
+            [
+                Text(f" {abbreviate_sink(input, SinkTypes.INPUT, length, with_state=True)}")
+                for input in info.input_list
+            ]
         )
 
         rows.append(Divider())

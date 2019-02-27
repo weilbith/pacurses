@@ -1,8 +1,9 @@
 from urwid import SimpleFocusListWalker, RadioButton
 
 from gui.menus.menu import Menu
-from gui.abbreviation import abbreviate_output
+from gui.abbreviation import abbreviate_sink
 from constants.menu_names import MenuNames
+from constants.sink_types import SinkTypes
 from pulse_audio.information import Information
 
 
@@ -11,27 +12,29 @@ RADIO_BUTTON_WIDTH = 4
 
 class DefaultMenu(Menu):
 
-    def __init__(self, width, state, redraw):
+    def __init__(self, width, state, redraw, sink_type=SinkTypes.OUTPUT):
         info = Information()
         length = width - RADIO_BUTTON_WIDTH - 2
         radio_buttons = []
         group = []
 
-        for output in info.output_list:
-            name = abbreviate_output(output, length)
+        sink_list = info.output_list if sink_type == SinkTypes.OUTPUT else info.input_list
+
+        for sink in sink_list:
+            name = abbreviate_sink(sink, sink_type, length)
             radio_button = RadioButton(
                 group,
                 name,
-                state=output.default,
-                on_state_change=self.set_default_output,
-                user_data=output
+                state=sink.default,
+                on_state_change=self.set_default_sink,
+                user_data=sink
             )
 
             radio_buttons.append(radio_button)
 
         walker = SimpleFocusListWalker(radio_buttons)
 
-        super(DefaultMenu, self).__init__(walker, width, state, redraw)
+        super(DefaultMenu, self).__init__(walker, width, state, redraw, sink_type)
 
     @property
     def name(self):
@@ -39,9 +42,9 @@ class DefaultMenu(Menu):
 
     @property
     def header_text(self):
-        return "Select the default output:"
+        return f"Select the default {self.sink_type.name.lower()}:"
 
-    def set_default_output(self, _, value, output):
-        output.default = value
+    def set_default_sink(self, _, value, sink):
+        sink.default = value
         self.redraw_self()
 

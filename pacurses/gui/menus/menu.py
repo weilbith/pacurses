@@ -1,6 +1,7 @@
 from urwid import ListBox
 
 from constants.menu_names import MenuNames
+from constants.state_keys import StateKeys
 
 
 FOCUS_POSITION = "focus_position"
@@ -8,7 +9,8 @@ FOCUS_POSITION_INTERNAL = "focus_position_internal"
 
 
 class Menu(ListBox):
-    def __init__(self, body, width, state, redraw):
+    def __init__(self, body, width, state, redraw, sink_type=None):
+        self.sink_type = sink_type
         self.width = width
         self.redraw = redraw
 
@@ -26,7 +28,20 @@ class Menu(ListBox):
 
     @property
     def current_state(self):
-        return MenuState({FOCUS_POSITION: self.focus_position})
+        position = 0
+
+        try:
+            position = self.focus_position
+
+        except IndexError:
+            pass
+
+        state = MenuState({StateKeys.FOCUS_POSITION: position})
+
+        if self.sink_type:
+            state[StateKeys.SINK_TYPE] = self.sink_type
+
+        return state
 
     def load_state(self, state):
         if not isinstance(state, MenuState):
@@ -36,10 +51,21 @@ class Menu(ListBox):
                 )
             )
 
-        self.set_focus(state[FOCUS_POSITION])
+        try:
+            self.set_focus(state[StateKeys.FOCUS_POSITION])
+
+        except IndexError:
+            pass
+
+        if StateKeys.SINK_TYPE in state:
+            self.sink_type = state[StateKeys.SINK_TYPE]
+
+    def redraw_wrapper(self, _, data):
+        menu_name, sink_type = data
+        self.redraw(menu_name, sink_type)
 
     def redraw_self(self):
-        self.redraw(None, self.name)
+        self.redraw(self.name, self.sink_type)
 
     def keypress(self, size, key):
         copy = key if key in ("down", "up") else None
@@ -60,9 +86,9 @@ class Menu(ListBox):
 
 class MenuState(dict):
     def __init__(self, values={}):
-        if FOCUS_POSITION not in values:
+        if StateKeys.FOCUS_POSITION not in values:
             raise Exception(
-                "Menu state requires at least the {0} value!".format(FOCUS_POSITION)
+                "Menu state requires at least the {0} value!".format(StateKeys.FOCUS_POSITION)
             )
 
         super(MenuState, self).__init__(values)

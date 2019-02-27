@@ -1,29 +1,16 @@
-from pulse_audio.external import call_pacmd
+from pulse_audio.sink import Sink
 
 
-class Input():
-
+class Input(Sink):
     def __init__(self, index):
-        self.index = index
+        super(Input, self).__init__(index, "sink-input")
 
     @property
-    def media(self):
-        return self.get_info('media.name =', '"')
-
-    @property
-    def application(self):
-        return self.get_info('application.name = ', '"')
+    def name(self):
+        application = self.get_info("application.name = ", '"')
+        media = self.get_info("media.name =", '"')
+        return f"{application}: {media}"
 
     @property
     def mapped_output_index(self):
-        return self.get_info('sink: ', ' ')
-
-    def get_info(self, filter, split):
-        command = "list-sink-inputs"
-        command += "| grep -A 30 'index: {0}'".format(self.index)
-        command += "| grep '{0}'".format(filter)
-        command += "| awk -F '{0}'".format(split) + " '{print $2}'"
-
-        information = call_pacmd(command)
-
-        return information.splitlines()[0] if information else information
+        return self.get_info("sink: ", " ")
