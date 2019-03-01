@@ -22,6 +22,7 @@ from constants.state_keys import StateKeys
 
 
 PADDING_WIDTH = 2
+UPDATE_CYCLE_PERIODE = 2
 
 
 class App:
@@ -127,6 +128,10 @@ class App:
                 else:
                     self.footer.button_list.focus_position = position + 1
 
+    def update_cycle(self, loop=None, user_data=None):
+        self.switch_menu(self.menu.name, self.menu.sink_type)
+        loop.set_alarm_in(UPDATE_CYCLE_PERIODE, self.update_cycle)
+
     def start(self):
         padding = Padding(
             self.frame,
@@ -148,6 +153,7 @@ class App:
         )
 
         loop = MainLoop(overlay, palette=palette, unhandled_input=self.global_input)
+        self.update_cycle(loop)
         loop.run()
 
 
