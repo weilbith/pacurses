@@ -10,19 +10,23 @@ from constants.sink_types import SinkTypes
 class VolumeMenu(Menu):
     def __init__(self, width, state, redraw, sink_type=SinkTypes.OUTPUT):
         info = Information()
+        sliders = []
+        index_positions = {}
 
         sink_list = (
             info.output_list if sink_type == SinkTypes.OUTPUT else info.input_list
         )
 
-        slider_list = [
-            VolumeSlider(sink, self.redraw_self, width=width)
-            for sink in sink_list
-        ]
+        for position, sink in enumerate(sink_list):
+            slider = VolumeSlider(sink, self.redraw_self, width=width)
+            sliders.append(slider)
+            index_positions[sink.index] = position
 
-        walker = SimpleFocusListWalker(slider_list)
+        walker = SimpleFocusListWalker(sliders)
 
-        super(VolumeMenu, self).__init__(walker, width, state, redraw, sink_type)
+        super(VolumeMenu, self).__init__(walker, width, state, redraw, index_positions, sink_type)
+
+        self.internal_focus = 0
 
     @property
     def name(self):
@@ -44,6 +48,7 @@ class VolumeMenu(Menu):
 
         try:
             self.body[self.focus_position].set_focus(True)
+            #  self.internal_focus = self.focus_position
 
         except IndexError:
             pass
@@ -62,13 +67,10 @@ class VolumeMenu(Menu):
     def keypress(self, size, key):
         key = super(VolumeMenu, self).keypress(size, key)
 
-        if key and key in ("j", "k", "down", "up"):
+        if key and (key in ("j", "k", "down", "up") or key.isdigit()):
+            self.body[self.internal_focus].set_focus(False)
             self.body[self.focus_position].set_focus(True)
-            step = 1 if key in ("k", "up") else -1
-            try:
-                self.body[self.focus_position + step].set_focus(False)
-            except IndexError:
-                pass
+            self.internal_focus = self.focus_position
 
         else:
             return key

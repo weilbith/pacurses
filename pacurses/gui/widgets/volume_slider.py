@@ -1,6 +1,6 @@
 from urwid import Columns, Button, AttrMap
 
-from gui.widgets.named_progress_bar import NamedProgressBar
+from gui.widgets.sink_progress_bar import SinkProgressBar
 from constants.palette_names import PaletteNames
 
 
@@ -51,11 +51,10 @@ class VolumeSlider(Columns):
 
         slider_width = self.width - 2 * FIXED_BUTTON_WIDTH - 2 * DIVIDER_WIDTH
 
-        return NamedProgressBar(
+        return SinkProgressBar(
             normal,
             complete,
-            current=self.sink.volume,
-            name=self.sink.name,
+            sink=self.sink,
             width=slider_width,
         )
 

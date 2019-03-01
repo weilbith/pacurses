@@ -5,12 +5,16 @@ ABBREVIATION_SUFFIX_STRING = "..."
 DEFAULT_PREFIX_STRING = "*"
 
 
-def abbreviate_text(text, length):
+def abbreviate_text(text, length, stretch=False):
     if len(text) <= length:
+        if stretch:
+            text += " " * (length - len(text))
+
         return text
 
-    relative_length = length - len(ABBREVIATION_SUFFIX_STRING)
-    return text[:relative_length] + ABBREVIATION_SUFFIX_STRING
+    else:
+        relative_length = length - len(ABBREVIATION_SUFFIX_STRING)
+        return text[:relative_length] + ABBREVIATION_SUFFIX_STRING
 
 
 def abbreviate_two_text(text_one, text_two, total_length):
@@ -30,13 +34,13 @@ def abbreviate_two_text(text_one, text_two, total_length):
     )
 
 
-def abbreviate_sink(sink, sink_type, length, with_state=False):
+def abbreviate_sink(sink, sink_type, length, with_state=False, stretch=False):
     default_prefix = DEFAULT_PREFIX_STRING if type(sink) == Output and sink.default else " "
     name = "{0}{1} {2}".format(sink.index, default_prefix, sink.name)
     length = length - len(default_prefix) - 3
 
     if not with_state:
-        return abbreviate_text(name, length)
+        return abbreviate_text(name, length, stretch=stretch)
 
     else:
         state = "{0}%{1}".format(sink.volume, " (muted)" if sink.muted else "")

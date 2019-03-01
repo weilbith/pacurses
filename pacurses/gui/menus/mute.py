@@ -15,22 +15,24 @@ class MuteMenu(Menu):
         info = Information()
         length = width - CHECKBOX_WIDTH - 2
         checkboxes = []
+        index_positions = {}
 
         sink_list = (
             info.output_list if sink_type == SinkTypes.OUTPUT else info.input_list
         )
 
-        for sink in sink_list:
+        for position, sink in enumerate(sink_list):
             name = abbreviate_sink(sink, sink_type, length)
             checkbox = CheckBox(
                 name, state=sink.muted, on_state_change=self.mute_sink, user_data=sink
             )
 
             checkboxes.append(checkbox)
+            index_positions[sink.index] = position
 
         walker = SimpleFocusListWalker(checkboxes)
 
-        super(MuteMenu, self).__init__(walker, width, state, redraw, sink_type)
+        super(MuteMenu, self).__init__(walker, width, state, redraw, index_positions, sink_type)
 
     @property
     def name(self):

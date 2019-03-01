@@ -9,10 +9,12 @@ FOCUS_POSITION_INTERNAL = "focus_position_internal"
 
 
 class Menu(ListBox):
-    def __init__(self, body, width, state, redraw, sink_type=None):
-        self.sink_type = sink_type
+    def __init__(self, body, width, state, redraw, index_positions={}, sink_type=None):
         self.width = width
         self.redraw = redraw
+        self.index_positions = index_positions
+        self.sink_type = sink_type
+        self.last_digit = ""
 
         super(Menu, self).__init__(body)
 
@@ -60,6 +62,14 @@ class Menu(ListBox):
         if StateKeys.SINK_TYPE in state:
             self.sink_type = state[StateKeys.SINK_TYPE]
 
+    def goto_index_position(self, index):
+        if index in self.index_positions:
+            try:
+                self.focus_position = self.index_positions[index]
+
+            except IndexError:
+                pass
+
     def redraw_wrapper(self, _, data):
         menu_name, sink_type = data
         self.redraw(menu_name, sink_type)
@@ -80,6 +90,11 @@ class Menu(ListBox):
 
             except IndexError:
                 pass
+
+        if key and key.isdigit():
+            self.goto_index_position(key)
+            self.goto_index_position(self.last_digit + key)
+            self.last_digit = key
 
         return key
 
