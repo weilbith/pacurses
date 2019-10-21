@@ -1,10 +1,10 @@
 from urwid import SimpleFocusListWalker
 
-from gui.menus.menu import Menu, FOCUS_POSITION_INTERNAL
-from gui.widgets.volume_slider import VolumeSlider
-from pulse_audio.information import Information
-from constants.menu_names import MenuNames
-from constants.sink_types import SinkTypes
+from pacurses.constants.menu_names import MenuNames
+from pacurses.constants.sink_types import SinkTypes
+from pacurses.gui.menus.menu import FOCUS_POSITION_INTERNAL, Menu
+from pacurses.gui.widgets.volume_slider import VolumeSlider
+from pacurses.pulse_audio.information import Information
 
 
 class VolumeMenu(Menu):
@@ -14,7 +14,9 @@ class VolumeMenu(Menu):
         index_positions = {}
 
         sink_list = (
-            info.output_list if sink_type == SinkTypes.OUTPUT else info.input_list
+            info.output_list
+            if sink_type == SinkTypes.OUTPUT
+            else info.input_list
         )
 
         for position, sink in enumerate(sink_list):
@@ -24,7 +26,9 @@ class VolumeMenu(Menu):
 
         walker = SimpleFocusListWalker(sliders)
 
-        super(VolumeMenu, self).__init__(walker, width, state, redraw, index_positions, sink_type)
+        super(VolumeMenu, self).__init__(
+            walker, width, state, redraw, index_positions, sink_type
+        )
 
         self.internal_focus = 0
 
@@ -39,7 +43,9 @@ class VolumeMenu(Menu):
     @property
     def current_state(self):
         state = super(VolumeMenu, self).current_state
-        state[FOCUS_POSITION_INTERNAL] = [bar.focus_position for bar in self.body]
+        state[FOCUS_POSITION_INTERNAL] = [
+            bar.focus_position for bar in self.body
+        ]
 
         return state
 

@@ -1,11 +1,10 @@
-from urwid import SimpleFocusListWalker, Button, AttrMap
+from urwid import AttrMap, Button, SimpleFocusListWalker
 
-from gui.menus.menu import Menu
-from gui.abbreviation import abbreviate_text
-from constants.menu_names import MenuNames
-from constants.palette_names import PaletteNames
-from constants.sink_types import SinkTypes
-
+from pacurses.constants.menu_names import MenuNames
+from pacurses.constants.palette_names import PaletteNames
+from pacurses.constants.sink_types import SinkTypes
+from pacurses.gui.abbreviation import abbreviate_text
+from pacurses.gui.menus.menu import Menu
 
 BUTTON_DECORATION_WIDTH = 2 * 2
 
@@ -34,19 +33,25 @@ class MainMenu(Menu):
 
         buttons.append(
             self.create_menu_button(
-                f"Mute {SinkTypes.OUTPUT.name.lower()}s", MenuNames.MUTE, SinkTypes.OUTPUT
+                f"Mute {SinkTypes.OUTPUT.name.lower()}s",
+                MenuNames.MUTE,
+                SinkTypes.OUTPUT,
             )
         )
 
         buttons.append(
             self.create_menu_button(
-                f"Mute {SinkTypes.INPUT.name.lower()}s", MenuNames.MUTE, SinkTypes.INPUT
+                f"Mute {SinkTypes.INPUT.name.lower()}s",
+                MenuNames.MUTE,
+                SinkTypes.INPUT,
             )
         )
 
         buttons.append(
             self.create_menu_button(
-                f"Set default {SinkTypes.OUTPUT.name.lower()}s", MenuNames.DEFAULT, SinkTypes.OUTPUT
+                f"Set default {SinkTypes.OUTPUT.name.lower()}s",
+                MenuNames.DEFAULT,
+                SinkTypes.OUTPUT,
             )
         )
 
@@ -65,5 +70,7 @@ class MainMenu(Menu):
     def create_menu_button(self, label, menu_name, sink_type):
         label = abbreviate_text(label, self.max_label_width)
         button = Button(label, self.redraw_wrapper, (menu_name, sink_type))
-        decorated_button = AttrMap(button, None, focus_map=PaletteNames.REVERSED)
+        decorated_button = AttrMap(
+            button, None, focus_map=PaletteNames.REVERSED
+        )
         return decorated_button

@@ -1,4 +1,4 @@
-from pulse_audio.sink import Sink
+from pacurses.pulse_audio.sink import Sink
 
 
 class Input(Sink):

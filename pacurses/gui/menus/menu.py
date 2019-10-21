@@ -1,15 +1,16 @@
 from urwid import ListBox
 
-from constants.menu_names import MenuNames
-from constants.state_keys import StateKeys
-
+from pacurses.constants.menu_names import MenuNames
+from pacurses.constants.state_keys import StateKeys
 
 FOCUS_POSITION = "focus_position"
 FOCUS_POSITION_INTERNAL = "focus_position_internal"
 
 
 class Menu(ListBox):
-    def __init__(self, body, width, state, redraw, index_positions={}, sink_type=None):
+    def __init__(
+        self, body, width, state, redraw, index_positions={}, sink_type=None
+    ):
         self.width = width
         self.redraw = redraw
         self.index_positions = index_positions
@@ -103,7 +104,9 @@ class MenuState(dict):
     def __init__(self, values={}):
         if StateKeys.FOCUS_POSITION not in values:
             raise Exception(
-                "Menu state requires at least the {0} value!".format(StateKeys.FOCUS_POSITION)
+                "Menu state requires at least the {0} value!".format(
+                    StateKeys.FOCUS_POSITION
+                )
             )
 
         super(MenuState, self).__init__(values)

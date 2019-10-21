@@ -1,8 +1,8 @@
-from urwid import SimpleFocusListWalker, Text, Divider
+from urwid import Divider, SimpleFocusListWalker, Text
 
-from gui.menus.menu import Menu
-from constants.menu_names import MenuNames
-from constants.palette_names import PaletteNames
+from pacurses.constants.menu_names import MenuNames
+from pacurses.constants.palette_names import PaletteNames
+from pacurses.gui.menus.menu import Menu
 
 
 class HelpMenu(Menu):
@@ -10,12 +10,20 @@ class HelpMenu(Menu):
         text = []
 
         text.append(Text((PaletteNames.UNDERLINE, "1. Section")))
-        text.append(Text("Was sollte man auch sonst mehr haben wollen,ich weiss wes auch nicht"))
+        text.append(
+            Text(
+                "Was sollte man auch sonst mehr haben wollen,ich weiss wes auch nicht"
+            )
+        )
 
         text.append(Divider())
 
         text.append(Text((PaletteNames.UNDERLINE, "2. Section")))
-        text.append(Text("Was sollte man auch sonst mehr haben wollen,ich weiss wes auch nicht"))
+        text.append(
+            Text(
+                "Was sollte man auch sonst mehr haben wollen,ich weiss wes auch nicht"
+            )
+        )
 
         walker = SimpleFocusListWalker(text)
 
@@ -28,4 +36,3 @@ class HelpMenu(Menu):
     @property
     def header_text(self):
         return "Help"
-

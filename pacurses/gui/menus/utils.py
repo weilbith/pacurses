@@ -1,11 +1,9 @@
-from constants.menu_names import MenuNames
-
-from gui.menus.main import MainMenu
-from gui.menus.volume import VolumeMenu
-from gui.menus.mute import MuteMenu
-from gui.menus.default import DefaultMenu
-from gui.menus.help import HelpMenu
-
+from pacurses.constants.menu_names import MenuNames
+from pacurses.gui.menus.default import DefaultMenu
+from pacurses.gui.menus.help import HelpMenu
+from pacurses.gui.menus.main import MainMenu
+from pacurses.gui.menus.mute import MuteMenu
+from pacurses.gui.menus.volume import VolumeMenu
 
 _menu_mapping = {
     MenuNames.MAIN: MainMenu,

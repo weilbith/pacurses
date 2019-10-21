@@ -1,6 +1,6 @@
-from pulse_audio.external import call_pacmd
-from pulse_audio.output import Output
-from pulse_audio.input import Input
+from pacurses.pulse_audio.external import call_pacmd
+from pacurses.pulse_audio.input import Input
+from pacurses.pulse_audio.output import Output
 
 
 class Information:

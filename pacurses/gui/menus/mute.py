@@ -1,11 +1,10 @@
-from urwid import SimpleFocusListWalker, CheckBox
+from urwid import CheckBox, SimpleFocusListWalker
 
-from gui.menus.menu import Menu
-from gui.abbreviation import abbreviate_sink
-from constants.menu_names import MenuNames
-from constants.sink_types import SinkTypes
-from pulse_audio.information import Information
-
+from pacurses.constants.menu_names import MenuNames
+from pacurses.constants.sink_types import SinkTypes
+from pacurses.gui.abbreviation import abbreviate_sink
+from pacurses.gui.menus.menu import Menu
+from pacurses.pulse_audio.information import Information
 
 CHECKBOX_WIDTH = 4
 
@@ -18,13 +17,18 @@ class MuteMenu(Menu):
         index_positions = {}
 
         sink_list = (
-            info.output_list if sink_type == SinkTypes.OUTPUT else info.input_list
+            info.output_list
+            if sink_type == SinkTypes.OUTPUT
+            else info.input_list
         )
 
         for position, sink in enumerate(sink_list):
             name = abbreviate_sink(sink, sink_type, length)
             checkbox = CheckBox(
-                name, state=sink.muted, on_state_change=self.mute_sink, user_data=sink
+                name,
+                state=sink.muted,
+                on_state_change=self.mute_sink,
+                user_data=sink,
             )
 
             checkboxes.append(checkbox)
@@ -32,7 +36,9 @@ class MuteMenu(Menu):
 
         walker = SimpleFocusListWalker(checkboxes)
 
-        super(MuteMenu, self).__init__(walker, width, state, redraw, index_positions, sink_type)
+        super(MuteMenu, self).__init__(
+            walker, width, state, redraw, index_positions, sink_type
+        )
 
     @property
     def name(self):

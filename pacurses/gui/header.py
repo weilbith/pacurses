@@ -1,17 +1,14 @@
-from urwid import Pile, Text, Divider
+from urwid import Divider, Pile, Text
 
-from constants.palette_names import PaletteNames
+from pacurses.constants.palette_names import PaletteNames
 
 
 class Header(Pile):
-
     def __init__(self):
         self._text = Text("", align="center")
         divider = Divider()
 
-        super(Header, self).__init__(
-                [divider, self._text, divider]
-        )
+        super(Header, self).__init__([divider, self._text, divider])
 
     @property
     def text(self):

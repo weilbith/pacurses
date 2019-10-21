@@ -1,5 +1,5 @@
-from pulse_audio.sink import Sink
-from pulse_audio.external import call_pacmd
+from pacurses.pulse_audio.external import call_pacmd
+from pacurses.pulse_audio.sink import Sink
 
 
 class Output(Sink):
@@ -8,11 +8,11 @@ class Output(Sink):
 
     @property
     def name(self):
-        return self.get_info('alsa.card_name = ', '"')
+        return self.get_info("alsa.card_name = ", '"')
 
     @property
     def default(self):
-        return self.get_info('index: ', ' ', 1) == '*'
+        return self.get_info("index: ", " ", 1) == "*"
 
     @default.setter
     def default(self, value):

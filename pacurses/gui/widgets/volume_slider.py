@@ -1,8 +1,7 @@
-from urwid import Columns, Button, AttrMap
+from urwid import AttrMap, Button, Columns
 
-from gui.widgets.sink_progress_bar import SinkProgressBar
-from constants.palette_names import PaletteNames
-
+from pacurses.constants.palette_names import PaletteNames
+from pacurses.gui.widgets.sink_progress_bar import SinkProgressBar
 
 FIXED_BUTTON_WIDTH = 5
 DIVIDER_WIDTH = 2
@@ -24,13 +23,17 @@ class VolumeSlider(Columns):
                 (
                     "fixed",
                     FIXED_BUTTON_WIDTH,
-                    AttrMap(button_lower, None, focus_map=PaletteNames.REVERSED),
+                    AttrMap(
+                        button_lower, None, focus_map=PaletteNames.REVERSED
+                    ),
                 ),
                 bar,
                 (
                     "fixed",
                     FIXED_BUTTON_WIDTH,
-                    AttrMap(button_higher, None, focus_map=PaletteNames.REVERSED),
+                    AttrMap(
+                        button_higher, None, focus_map=PaletteNames.REVERSED
+                    ),
                 ),
             ],
             dividechars=DIVIDER_WIDTH,
@@ -52,10 +55,7 @@ class VolumeSlider(Columns):
         slider_width = self.width - 2 * FIXED_BUTTON_WIDTH - 2 * DIVIDER_WIDTH
 
         return SinkProgressBar(
-            normal,
-            complete,
-            sink=self.sink,
-            width=slider_width,
+            normal, complete, sink=self.sink, width=slider_width
         )
 
     def adjust_volume(self, _, value):

@@ -1,7 +1,7 @@
 from urwid import ProgressBar
 
-from gui.abbreviation import abbreviate_sink
-from pulse_audio.utils import get_sink_type
+from pacurses.gui.abbreviation import abbreviate_sink
+from pacurses.pulse_audio.utils import get_sink_type
 
 
 class SinkProgressBar(ProgressBar):

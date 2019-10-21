@@ -1,25 +1,23 @@
 from urwid import (
     Divider,
+    ExitMainLoop,
     Frame,
     LineBox,
-    Padding,
-    Overlay,
-    SolidFill,
     MainLoop,
-    ExitMainLoop,
+    Overlay,
+    Padding,
+    SolidFill,
 )
 
-from gui.header import Header
-from gui.menus.menu import Menu, MenuState
-from gui.menus.utils import get_menu
-from gui.footer import Footer
-from gui.palette import palette
-
-from constants.menu_names import MenuNames
-from constants.button_names import ButtonNames
-from constants.palette_names import PaletteNames
-from constants.state_keys import StateKeys
-
+from pacurses.constants.button_names import ButtonNames
+from pacurses.constants.menu_names import MenuNames
+from pacurses.constants.palette_names import PaletteNames
+from pacurses.constants.state_keys import StateKeys
+from pacurses.gui.footer import Footer
+from pacurses.gui.header import Header
+from pacurses.gui.menus.menu import Menu, MenuState
+from pacurses.gui.menus.utils import get_menu
+from pacurses.gui.palette import palette
 
 PADDING_WIDTH = 2
 UPDATE_CYCLE_PERIODE = 2
@@ -59,7 +57,9 @@ class App:
             else menu_name
         )
 
-        self.last_menu_name = self.menu.name if menu_name == MenuNames.HELP else None
+        self.last_menu_name = (
+            self.menu.name if menu_name == MenuNames.HELP else None
+        )
 
         if menu_name not in MenuNames:
             raise ValueError("Unkown menu '{0}'!".format(menu_name))
@@ -76,7 +76,9 @@ class App:
         if StateKeys.SINK_TYPE in state and sink_type:
             del state[StateKeys.SINK_TYPE]
 
-        self.menu = get_menu(menu_name)(self.inner_width, state, self.switch_menu, sink_type=sink_type)
+        self.menu = get_menu(menu_name)(
+            self.inner_width, state, self.switch_menu, sink_type=sink_type
+        )
         self.header.text = self.menu.header_text
         self.frame.body = self.menu
 
@@ -152,9 +154,12 @@ class App:
             height=self.height,
         )
 
-        loop = MainLoop(overlay, palette=palette, unhandled_input=self.global_input)
+        loop = MainLoop(
+            overlay, palette=palette, unhandled_input=self.global_input
+        )
         self.update_cycle(loop)
         loop.run()
 
 
-App((48, 30)).start()
+def main():
+    App((48, 30)).start()

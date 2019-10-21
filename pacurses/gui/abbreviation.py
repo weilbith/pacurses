@@ -1,5 +1,4 @@
-from pulse_audio.output import Output
-
+from pacurses.pulse_audio.output import Output
 
 ABBREVIATION_SUFFIX_STRING = "..."
 DEFAULT_PREFIX_STRING = "*"
@@ -23,10 +22,16 @@ def abbreviate_two_text(text_one, text_two, total_length):
     text_two_length = len(text_two)
 
     if text_one_length < length_each_text:
-        return (text_one, abbreviate_text(text_two, total_length - text_one_length))
+        return (
+            text_one,
+            abbreviate_text(text_two, total_length - text_one_length),
+        )
 
     if text_two_length < length_each_text:
-        return (abbreviate_text(text_one, total_length - text_two_length), text_two)
+        return (
+            abbreviate_text(text_one, total_length - text_two_length),
+            text_two,
+        )
 
     return (
         abbreviate_text(text_one, length_each_text),
@@ -35,10 +40,11 @@ def abbreviate_two_text(text_one, text_two, total_length):
 
 
 def abbreviate_sink(sink, sink_type, length, with_state=False, stretch=False):
-    default_prefix = DEFAULT_PREFIX_STRING if type(sink) == Output and sink.default else " "
+    default_prefix = (
+        DEFAULT_PREFIX_STRING if type(sink) == Output and sink.default else " "
+    )
     name = "{0}{1} {2}".format(sink.index, default_prefix, sink.name)
     length = length - len(default_prefix) - 3
-
     if not with_state:
         return abbreviate_text(name, length, stretch=stretch)
 
